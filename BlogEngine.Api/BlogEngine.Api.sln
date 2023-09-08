@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Domain", "BlogEn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Infrastructure", "BlogEngine.Infrastructure\BlogEngine.Infrastructure.csproj", "{279EDF37-5663-46F3-A483-490AC83CE49A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.IoC", "BlogEngine.IoC\BlogEngine.IoC.csproj", "{FAA8362E-9C9D-4E50-8BF5-58F24114F82B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{279EDF37-5663-46F3-A483-490AC83CE49A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{279EDF37-5663-46F3-A483-490AC83CE49A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{279EDF37-5663-46F3-A483-490AC83CE49A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAA8362E-9C9D-4E50-8BF5-58F24114F82B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAA8362E-9C9D-4E50-8BF5-58F24114F82B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAA8362E-9C9D-4E50-8BF5-58F24114F82B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAA8362E-9C9D-4E50-8BF5-58F24114F82B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
