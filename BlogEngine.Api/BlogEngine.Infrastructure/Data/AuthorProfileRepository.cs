@@ -14,7 +14,7 @@ namespace BlogEngine.Infrastructure.Data
             _database = database;
         }
 
-        public async Task<int> Create(AuthorProfile userProfile, DbConnection dbConnection, DbTransaction dbTransaction)
+        public async Task<int> CreateAsync(AuthorProfile userProfile, DbConnection dbConnection, DbTransaction dbTransaction)
         {
             const string query = @"
                     INSERT INTO user_profile (user_id, profile_id)
@@ -26,7 +26,7 @@ namespace BlogEngine.Infrastructure.Data
             return await dbConnection.QuerySingleAsync<int>(query, userProfile, dbTransaction);
         }
 
-        public async Task<AuthorProfile> GetUserProfile(string name, string email)
+        public async Task<AuthorProfile> GetUserProfileAsync(string name, string email)
         {
             await using var conn = await _database.CreateAndOpenConnection();
 
