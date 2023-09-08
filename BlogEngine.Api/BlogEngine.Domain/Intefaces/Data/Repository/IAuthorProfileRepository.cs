@@ -5,7 +5,7 @@ namespace BlogEngine.Domain.Intefaces.Data.Repository
 {
     public interface IAuthorProfileRepository
     {
-        Task<AuthorProfile> GetUserProfile(string name, string email);
-        Task<int> Create(AuthorProfile userProfile, DbConnection dbConnection, DbTransaction dbTransaction);
+        Task<AuthorProfile> GetUserProfileAsync(string name, string email);
+        Task<int> CreateAsync(AuthorProfile userProfile, DbConnection dbConnection, DbTransaction dbTransaction);
     }
 }
