@@ -19,7 +19,7 @@ namespace BlogEngine.Service
             IDatabase database,
             IAuthorProfileRepository authorProfileRepository)
         {
-            authorRepository = _authorRepository;
+            _authorRepository = authorRepository;
             _authorProfileRepository = authorProfileRepository;
             _database = database;
         }
