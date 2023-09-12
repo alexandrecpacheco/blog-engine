@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BlogEngine.Domain\BlogEngine.Domain.csproj" />
     <ProjectReference Include="..\BlogEngine.Infrastructure\BlogEngine.Infrastructure.csproj" />
+    <ProjectReference Include="..\BlogEngine.Service\BlogEngine.Service.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,19 +1,28 @@
-using AutoMapper;
-using BlogEngine.IoC;
+using BlogEngine;
+using BlogEngine.Domain;
 using BlogEngine.Domain.Intefaces;
+using BlogEngine.IoC;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddCustomSwagger();
+
 
 builder.Services.RegisterDependencyInjection();
 
-builder.Services.AddLogging();
+builder.Services.AddCustomCors();
+var apiSettings = new ApiSettings();
+builder.Configuration.Bind("BlogEngine", apiSettings);
+builder.Services.AddCustomAuthorization();
+builder.Services.AddSingleton(apiSettings);
+builder.Services.AddCustomAuthentication(apiSettings);
 
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
@@ -32,6 +41,7 @@ if (app.Environment.IsDevelopment())
 
     app.UseSwagger();
     app.UseSwaggerUI();
+
 }
 
 app.UseHttpsRedirection();
@@ -42,13 +52,3 @@ app.MapControllers();
 
 app.Run();
 
-//RegisterMappings();
-
-//static MapperConfiguration RegisterMappings()
-//{
-//    return new MapperConfiguration(cfg =>
-//    {
-//        cfg.AddProfile(new DomainToResponseMappingProfile());
-//        cfg.AddProfile(new RequestToDomainMapperTask());
-//    });
-//}

@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlogEngine.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    [Route("api/[controller]")]
+    public class WeatherForecastController : BaseController
     {
         private static readonly string[] Summaries = new[]
         {
@@ -18,9 +17,11 @@ namespace BlogEngine.Controllers
             _logger = logger;
         }
 
+        [Attributes.Authorize(Role.Public)]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
