@@ -51,5 +51,19 @@ namespace BlogEngine.Controllers
 
             return await ResponseResult(true);
         }
+
+        [Attributes.Authorize(Role.Writer)]
+        [HttpPut("update-post")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(PostUpdateRequest request)
+        {
+            if (request == null) return BadRequest();
+
+            await _postsService.UpdateAsync(request);
+
+            return await ResponseResult(true);
+        }
     }
 }

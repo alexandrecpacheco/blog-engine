@@ -26,6 +26,19 @@ namespace BlogEngine.Infrastructure.Data
             return await dbConnection.QuerySingleAsync<int>(query, posts, dbTransaction);
         }
 
+        public async Task Update(PostsEntity posts, DbConnection dbConnection, DbTransaction dbTransaction)
+        {
+            const string query = @"
+                UPDATE posts
+                        SET title = @Title,
+                        description = @Description
+                        readonly_by_author = @ReadOnlyByAuthor
+                WHERE post_id = @PostId
+            ";
+
+            await dbConnection.ExecuteAsync(query, posts, dbTransaction);
+        }
+
         public async Task<IEnumerable<PostsEntity>> GetPosts()
         {
             await using var conn = await _database.CreateAndOpenConnection();
@@ -36,7 +49,7 @@ namespace BlogEngine.Infrastructure.Data
                     INNER JOIN comments c ON
 	                    c.post_id = p.post_id
             ";
-            
+
             var postsDictionary = new Dictionary<int, PostsEntity>();
             var commentsDictionary = new Dictionary<int, CommentsEntity>();
             var result = await conn.QueryAsync<PostsEntity, CommentsEntity, PostsEntity>(query,
@@ -69,7 +82,7 @@ namespace BlogEngine.Infrastructure.Data
             return result.ToList();
         }
 
-        public async Task<bool> GetPublishedPostByIdAsync(int postId) 
+        public async Task<bool> GetPublishedPostByIdAsync(int postId)
         {
             await using var conn = await _database.CreateAndOpenConnection();
             const string query = @"
@@ -81,6 +94,19 @@ namespace BlogEngine.Infrastructure.Data
             var parameters = new { postId };
 
             return await conn.QueryFirstOrDefaultAsync<bool>(query, parameters);
+        }
+
+        public async Task<int> GetPostByIdAsync(int postId)
+        {
+            await using var conn = await _database.CreateAndOpenConnection();
+            const string query = @"
+                SELECT post_id
+                    FROM posts
+                WHERE post_id = @PostId
+            ";
+            var parameters = new { postId };
+
+            return await conn.QueryFirstOrDefaultAsync<int>(query, parameters);
         }
     }
 }

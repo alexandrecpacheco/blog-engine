@@ -38,6 +38,27 @@ namespace BlogEngine.Service
             });
         }
 
+        public async Task UpdateAsync(PostUpdateRequest request)
+        {
+            var postId = await _postsRepository.GetPostByIdAsync(request.PostId);
+
+            if (postId <= 0)
+                throw new InvalidOperationException("The Post mentioned does not exists");
+            
+            await _database.ExecuteInTransaction(async (connection, transaction) =>
+            {
+                var post = new PostsEntity()
+                {
+                    PostId = postId,
+                    Title = request.Title,
+                    Description = request.Description,
+                    ReadOnlyByAuthor = request.ReadOnlyByAuthor,
+                };
+
+                await _postsRepository.Update(post, connection, transaction);
+            });
+        }
+
         public async Task<IEnumerable<PostsResponse>> GetPostsAsync()
         {
             var result = await _postsRepository.GetPosts();

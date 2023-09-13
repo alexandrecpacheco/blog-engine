@@ -3,9 +3,9 @@
 namespace BlogEngine.Domain.Dto.Request
 {
     [ExcludeFromCodeCoverage]
-    public class PostRequest
+    public class PostUpdateRequest
     {
-        public int AuthorProfileId { get; set; }
+        public int PostId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public bool ReadOnlyByAuthor { get; set; }
