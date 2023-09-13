@@ -1,8 +1,9 @@
+using AutoMapper;
 using BlogEngine;
 using BlogEngine.Domain;
+using BlogEngine.Domain.AutoMapper;
 using BlogEngine.Domain.Intefaces;
 using BlogEngine.IoC;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddSingleton(apiSettings);
 builder.Services.AddCustomAuthentication(apiSettings);
 
 builder.Services.AddLogging();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -52,3 +55,13 @@ app.MapControllers();
 
 app.Run();
 
+RegisterMappings();
+
+static MapperConfiguration RegisterMappings()
+{
+    return new MapperConfiguration(cfg =>
+    {
+        cfg.AddProfile(new DomainToResponseMappingProfile());
+        cfg.AddProfile(new RequestToDomainMapperTask());
+    });
+}

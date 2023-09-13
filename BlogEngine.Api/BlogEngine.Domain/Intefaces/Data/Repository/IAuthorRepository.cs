@@ -5,8 +5,8 @@ namespace BlogEngine.Domain.Intefaces.Data.Repository
 {
     public interface IAuthorRepository
     {
-        Task<Author> GetByEmailAndPasswordAsync(Author authorEntity);
-        Task<Author> GetByEmailAsync(string email);
-        Task<int> CreateAsync(Author author, DbConnection dbConnection, DbTransaction dbTransaction);
+        Task<AuthorEntity> GetByEmailAndPasswordAsync(AuthorEntity authorEntity);
+        Task<AuthorEntity> GetByEmailAsync(string email);
+        Task<int> CreateAsync(AuthorEntity author, DbConnection dbConnection, DbTransaction dbTransaction);
     }
 }

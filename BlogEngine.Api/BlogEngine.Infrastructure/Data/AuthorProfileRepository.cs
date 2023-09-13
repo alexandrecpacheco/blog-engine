@@ -14,7 +14,7 @@ namespace BlogEngine.Infrastructure.Data
             _database = database;
         }
 
-        public async Task<int> CreateAsync(AuthorProfile userProfile, DbConnection dbConnection, DbTransaction dbTransaction)
+        public async Task<int> CreateAsync(AuthorProfileEntity userProfile, DbConnection dbConnection, DbTransaction dbTransaction)
         {
             const string query = @"
                     INSERT INTO user_profile (user_id, profile_id)
@@ -26,7 +26,7 @@ namespace BlogEngine.Infrastructure.Data
             return await dbConnection.QuerySingleAsync<int>(query, userProfile, dbTransaction);
         }
 
-        public async Task<AuthorProfile> GetUserProfileAsync(string name, string email)
+        public async Task<AuthorProfileEntity> GetUserProfileAsync(string name, string email)
         {
             await using var conn = await _database.CreateAndOpenConnection();
 
@@ -44,8 +44,8 @@ namespace BlogEngine.Infrastructure.Data
             query += !string.IsNullOrWhiteSpace(email) ? " AND email = @Email" : string.Empty;
 
             var parameters = new { email, name };
-            var userDictionary = new Dictionary<int, AuthorProfile>();
-            var result = await conn.QueryAsync<AuthorProfile, Profile, AuthorProfile>(query,
+            var userDictionary = new Dictionary<int, AuthorProfileEntity>();
+            var result = await conn.QueryAsync<AuthorProfileEntity, ProfileEntity, AuthorProfileEntity>(query,
                 (userProfile, profile) =>
                 {
                     if (userDictionary.TryGetValue(userProfile.AuthorId, out var userResponse) == false)

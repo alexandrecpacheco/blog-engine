@@ -1,5 +1,4 @@
 ﻿using BlogEngine.Domain.Entities;
-using BlogEngine.Domain.Intefaces;
 using BlogEngine.Domain.Intefaces.Data.Repository;
 using Dapper;
 using System.Data.Common;
@@ -8,23 +7,16 @@ namespace BlogEngine.Infrastructure.Data
 {
     public class CommentsRepository : ICommentsRepository
     {
-        private readonly IDatabase _database;
-        public CommentsRepository(IDatabase database)
+        public async Task<int> Create(CommentsEntity comment, DbConnection dbConnection, DbTransaction dbTransaction)
         {
-            _database = database;
-        }
-
-        public async Task<int> Create(Comments comments, DbConnection dbConnection, DbTransaction dbTransaction)
-        {
-            //TODO: Need to be created
             const string query = @"
-                    INSERT INTO posts (user_profile_id, [description], start_at, end_at)
-                    VALUES (@UserProfileId, @Description, @StartAt, @EndAt)
-            
-                    SELECT @@IDENTITY;
+                INSERT INTO comments (post_id, comment, readble_by_author_profile_id)
+                VALUES (@PostId, @Comment, @ReadbleByAuthorProfileId)
+                
+                SELECT @@IDENTITY;
             ";
 
-            return await dbConnection.QuerySingleAsync<int>(query, comments, dbTransaction);
+            return await dbConnection.QuerySingleAsync<int>(query, comment, dbTransaction);
         }
     }
 }

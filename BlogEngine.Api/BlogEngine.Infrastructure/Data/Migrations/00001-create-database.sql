@@ -37,10 +37,10 @@ CREATE TABLE posts
 (
     post_id  int IDENTITY (1,1),
     author_profile_id int NOT NULL,
-    comment_id int NOT NULL,
     title varchar(100)               NOT NULL,
-    publish_date datetime NOT NULL,
-    approved bit NOT NULL,
+    [description] varchar(250) NOT NULL,
+    [readonly_by_author] bit NOT NULL, 
+    publish_date datetime NULL,
     created_at  datetime DEFAULT GETDATE() NOT NULL,
     updated_at  datetime                   NULL,
     CONSTRAINT ["pk_posts"] PRIMARY KEY NONCLUSTERED (post_id)
@@ -52,10 +52,22 @@ CREATE TABLE comments
     comment_id int IDENTITY (1,1),
     post_id int NOT NULL,
     comment varchar(250) NOT NULL,
-    author_profile_id int NULL,
+    readble_by_author_profile_id int NULL,
     created_at  datetime DEFAULT GETDATE() NOT NULL,
     updated_at  datetime                   NULL,
     CONSTRAINT ["pk_comments"] PRIMARY KEY NONCLUSTERED (comment_id)
+)
+GO
+
+CREATE TABLE submits
+(
+    submit_id int IDENTITY (1,1),
+    post_id int NOT NULL,
+    publish_type char(1) NOT NULL,
+    comment varchar(250) NOT NULL,
+    created_at  datetime DEFAULT GETDATE() NOT NULL,
+    updated_at  datetime                   NULL,
+    CONSTRAINT ["pk_submits"] PRIMARY KEY NONCLUSTERED (submit_id)
 )
 GO
 
@@ -69,27 +81,26 @@ ALTER TABLE author_profile
         FOREIGN KEY (author_id) REFERENCES [author] (author_id)
 GO
 
-ALTER TABLE posts
-    ADD CONSTRAINT ["fk_posts_author_profile"]
-        FOREIGN KEY (author_profile_id) REFERENCES [author_profile] (author_profile_id)
-GO
-
-ALTER TABLE posts
-    ADD CONSTRAINT ["fk_posts_comments"]
-        FOREIGN KEY (comment_id) REFERENCES [comments] (comment_id)
-GO
-
 ALTER TABLE comments
     ADD CONSTRAINT ["fk_comments_posts"]
-        FOREIGN KEY (author_profile_id) REFERENCES [author_profile] (author_profile_id)
+        FOREIGN KEY (post_id) REFERENCES [posts] (post_id)
 GO
+
+ALTER TABLE submits
+    ADD CONSTRAINT ["fk_submits_posts"]
+        FOREIGN KEY (post_id) REFERENCES [posts] (post_id)
+GO
+
 
 INSERT INTO [profile] ([description], created_at) VALUES ('Public', GETDATE()), ('Writer', GETDATE()), ('Editor', GETDATE())
 GO
 
 INSERT INTO [author] (email, [password], name, is_active, created_at)
 VALUES('public@email.com', 'public123@', 'Public', 1, GETDATE())
+, ('writer@email.com', 'writer123@', 'Writer', 2, GETDATE())
+, ('editor@email.com', 'editor123@', 'Editor', 3, GETDATE())
 GO
 
-INSERT INTO author_profile (author_id, profile_id, created_at) VALUES (1, 1, GETDATE())
+INSERT INTO author_profile (author_id, profile_id, created_at) VALUES (1, 1, GETDATE()), (2, 2, GETDATE()), (3, 3, GETDATE())
 GO
+

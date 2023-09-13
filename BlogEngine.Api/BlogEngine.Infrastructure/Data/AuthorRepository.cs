@@ -14,12 +14,12 @@ namespace BlogEngine.Infrastructure.Data
             _database = database;
         }
 
-        public Task<int> CreateAsync(Author author, DbConnection dbConnection, DbTransaction dbTransaction)
+        public Task<int> CreateAsync(AuthorEntity author, DbConnection dbConnection, DbTransaction dbTransaction)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Author> GetByEmailAndPasswordAsync(Author authorEntity)
+        public async Task<AuthorEntity> GetByEmailAndPasswordAsync(AuthorEntity authorEntity)
         {
             await using var conn = await _database.CreateAndOpenConnection();
 
@@ -36,8 +36,8 @@ namespace BlogEngine.Infrastructure.Data
                     AND password = @Password";
 
             var parameters = new { authorEntity.Email, authorEntity.Password };
-            var authorDictionary = new Dictionary<int, Author>();
-            var result = await conn.QueryAsync<Author, AuthorProfile, Profile, Author>(query,
+            var authorDictionary = new Dictionary<int, AuthorEntity>();
+            var result = await conn.QueryAsync<AuthorEntity, AuthorProfileEntity, ProfileEntity, AuthorEntity>(query,
                 (author, authorProfile, profile) =>
                 {
                     if (authorDictionary.TryGetValue(author.AuthorId, out var authorResponse) == false)
@@ -59,7 +59,7 @@ namespace BlogEngine.Infrastructure.Data
             return result.FirstOrDefault();
         }
 
-        public async Task<Author> GetByEmailAsync(string email)
+        public async Task<AuthorEntity> GetByEmailAsync(string email)
         {
             await using var conn = await _database.CreateAndOpenConnection();
             const string query = @"
@@ -69,7 +69,7 @@ namespace BlogEngine.Infrastructure.Data
             ";
 
             var parameters = new { email };
-            return await conn.QueryFirstOrDefaultAsync<Author>(query, parameters);
+            return await conn.QueryFirstOrDefaultAsync<AuthorEntity>(query, parameters);
         }
     }
 }
