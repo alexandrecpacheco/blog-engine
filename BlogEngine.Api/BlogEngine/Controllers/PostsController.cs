@@ -26,7 +26,20 @@ namespace BlogEngine.Controllers
         }
 
         [Attributes.Authorize(Role.Public, Role.Writer, Role.Editor)]
-        [HttpPost("create")]
+        [HttpGet("get-published-posts-by-id")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPublishedPostById([FromQuery] int postId)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            var published = await _postsService.GetPublishedPostByIdAsync(postId);
+            var result = new { published };
+            
+            return await ResponseResult(result);
+        }
+
+        [Attributes.Authorize(Role.Writer)]
+        [HttpPost("create-post")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

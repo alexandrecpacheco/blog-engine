@@ -7,5 +7,6 @@ namespace BlogEngine.Domain.Intefaces.Data.Repository
     {
         Task<int> Create(PostsEntity posts, DbConnection dbConnection, DbTransaction dbTransaction);
         Task<IEnumerable<PostsEntity>> GetPosts();
+        Task<bool> GetPublishedPostByIdAsync(int postId);
     }
 }

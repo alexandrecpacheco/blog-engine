@@ -7,6 +7,7 @@ namespace BlogEngine.Domain.Intefaces.Data.Service
     {
         Task CreateAsync(PostRequest request);
         Task<IEnumerable<PostsResponse>> GetPostsAsync();
+        Task<bool> GetPublishedPostByIdAsync(int postId);
 
     }
 }

@@ -7,8 +7,8 @@ namespace BlogEngine.Domain.Dto.Request
     {
         public int AuthorProfileId { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
         public char PublishType { get; set; }
         public bool ReadOnlyByAuthor { get; set; }
-        public CommentRequest Comment { get; set; }
     }
 }

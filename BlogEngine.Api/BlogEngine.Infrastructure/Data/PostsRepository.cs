@@ -17,8 +17,8 @@ namespace BlogEngine.Infrastructure.Data
         public async Task<int> Create(PostsEntity posts, DbConnection dbConnection, DbTransaction dbTransaction)
         {
             const string query = @"
-                    INSERT INTO posts(author_profile_id, title, publish_type, publish_date, readonly_by_author)
-                    values (@AuthorProfileId, @Title, @PublishType, @PublishDate, @ReadonlyByAuthor)
+                    INSERT INTO posts(author_profile_id, title, [description], publish_type, publish_date, readonly_by_author)
+                    values (@AuthorProfileId, @Title, @Description, @PublishType, @PublishDate, @ReadonlyByAuthor)
             
                     SELECT @@IDENTITY;
             ";
@@ -67,6 +67,20 @@ namespace BlogEngine.Infrastructure.Data
                 }, splitOn: "post_id, comment_id");
 
             return result.ToList();
+        }
+
+        public async Task<bool> GetPublishedPostByIdAsync(int postId) 
+        {
+            await using var conn = await _database.CreateAndOpenConnection();
+            const string query = @"
+                SELECT post_id
+                    FROM posts
+                WHERE post_id = @PostId
+                AND publish_date IS NOT NULL
+            ";
+            var parameters = new { postId };
+
+            return await conn.QueryFirstOrDefaultAsync<bool>(query, parameters);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace BlogEngine.IoC
             services.AddSingleton<IDatabase, Database>();
 
             services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<ICommentsService, CommentsService>();
             services.AddScoped<IPostsService, PostsService>();
 
             services.AddScoped<IAuthorRepository, AuthorRepository>();
