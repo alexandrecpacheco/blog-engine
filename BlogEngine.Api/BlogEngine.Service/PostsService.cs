@@ -74,5 +74,15 @@ namespace BlogEngine.Service
 
             return result;
         }
+        
+        public async Task<IEnumerable<PostsResponse>> GetPendingPostsAsync()
+        {
+            var result = await _postsRepository.GetPendingPostsAsync();
+            if (result == null) return default!;
+
+            var mapped = _mapper.Map<IEnumerable<PostsResponse>>(result);
+
+            return mapped;
+        }
     }
 }

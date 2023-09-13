@@ -97,7 +97,10 @@ GO
 
 INSERT INTO [author] (email, [password], name, is_active, created_at)
 VALUES('public@email.com', 'public123@', 'Public', 1, GETDATE())
+, ('writer@email.com', 'writer123@', 'Writer', 2, GETDATE())
+, ('editor@email.com', 'editor123@', 'Editor', 3, GETDATE())
 GO
 
-INSERT INTO author_profile (author_id, profile_id, created_at) VALUES (1, 1, GETDATE())
+INSERT INTO author_profile (author_id, profile_id, created_at) VALUES (1, 1, GETDATE()), (2, 2, GETDATE()), (3, 3, GETDATE())
 GO
+

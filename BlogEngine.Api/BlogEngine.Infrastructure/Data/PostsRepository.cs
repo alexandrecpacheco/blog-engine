@@ -31,7 +31,7 @@ namespace BlogEngine.Infrastructure.Data
             const string query = @"
                 UPDATE posts
                         SET title = @Title,
-                        description = @Description
+                        description = @Description,
                         readonly_by_author = @ReadOnlyByAuthor
                 WHERE post_id = @PostId
             ";
@@ -107,6 +107,19 @@ namespace BlogEngine.Infrastructure.Data
             var parameters = new { postId };
 
             return await conn.QueryFirstOrDefaultAsync<int>(query, parameters);
+        }
+
+        public async Task<IEnumerable<PostsEntity>> GetPendingPostsAsync()
+        {
+            await using var conn = await _database.CreateAndOpenConnection();
+            const string query = @"
+                SELECT p.post_id, p.title, p.[description]
+                    FROM posts p
+                    INNER JOIN submits s ON s.post_id = p.post_id
+                WHERE s.publish_type = 'P'
+            ";
+
+            return await conn.QueryAsync<PostsEntity>(query);
         }
     }
 }

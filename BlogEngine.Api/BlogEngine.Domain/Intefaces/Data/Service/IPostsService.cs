@@ -9,6 +9,6 @@ namespace BlogEngine.Domain.Intefaces.Data.Service
         Task UpdateAsync(PostUpdateRequest request);
         Task<IEnumerable<PostsResponse>> GetPostsAsync();
         Task<bool> GetPublishedPostByIdAsync(int postId);
-
+        Task<IEnumerable<PostsResponse>> GetPendingPostsAsync();
     }
 }

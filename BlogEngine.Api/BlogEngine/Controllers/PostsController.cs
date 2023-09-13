@@ -65,5 +65,17 @@ namespace BlogEngine.Controllers
 
             return await ResponseResult(true);
         }
+
+        [Attributes.Authorize(Role.Editor)]
+        [HttpGet("get-pending-posts")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPendingPosts()
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            var search = await _postsService.GetPendingPostsAsync();
+
+            return await ResponseResult(search);
+        }
     }
 }

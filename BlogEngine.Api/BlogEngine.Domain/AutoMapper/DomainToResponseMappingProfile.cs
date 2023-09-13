@@ -10,6 +10,7 @@ namespace BlogEngine.Domain.AutoMapper
         {
             CreateMap<PostsEntity, PostsResponse>();
             CreateMap<CommentsEntity, CommentsResponse>();
+            CreateMap<PostsEntity, PostsResponse>();
         }
     }
 }

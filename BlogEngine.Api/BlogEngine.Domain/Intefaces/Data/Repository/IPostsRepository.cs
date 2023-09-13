@@ -10,5 +10,6 @@ namespace BlogEngine.Domain.Intefaces.Data.Repository
         Task<IEnumerable<PostsEntity>> GetPosts();
         Task<bool> GetPublishedPostByIdAsync(int postId);
         Task<int> GetPostByIdAsync(int postId);
+        Task<IEnumerable<PostsEntity>> GetPendingPostsAsync();
     }
 }
