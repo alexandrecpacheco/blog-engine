@@ -22,6 +22,7 @@ namespace BlogEngine.IoC
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IAuthorProfileRepository, AuthorProfileRepository>();
             services.AddScoped<IPostsRepository, PostsRepository>();
+            services.AddScoped<ICommentsRepository, CommentsRepository>();
         }
     }
 }

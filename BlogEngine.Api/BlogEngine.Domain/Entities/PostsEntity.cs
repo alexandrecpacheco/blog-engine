@@ -5,13 +5,18 @@ namespace BlogEngine.Domain.Entities
     [ExcludeFromCodeCoverage]
     public class PostsEntity : BaseEntity
     {
+        public PostsEntity()
+        {
+            Comments = new HashSet<CommentsEntity>();
+        }
+
         public int PostId { get; set; }
-        public int AuthorId { get; set; }
-        public string Comment { get; set; }
+        public int AuthorProfileId { get; set; }
         public string Title { get; set; }
-        public DateTime PublishDate { get; set; }
-        public bool Approved { get; set; }
+        public char PublishType { get; set; }
         public bool ReadOnlyByAuthor { get; set; }
-        public AuthorProfileEntity AuthorProfile { get; set; }
+        public DateTime? PublishDate { get; set; }
+        public AuthorProfileEntity? AuthorProfile { get; set; }
+        public ICollection<CommentsEntity> Comments { get; set; }
     }
 }

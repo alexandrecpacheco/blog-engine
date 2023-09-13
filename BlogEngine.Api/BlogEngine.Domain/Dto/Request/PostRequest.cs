@@ -1,12 +1,14 @@
-﻿namespace BlogEngine.Domain.Dto.Response
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BlogEngine.Domain.Dto.Request
 {
-    public class PostsResponse
+    [ExcludeFromCodeCoverage]
+    public class PostRequest
     {
         public int AuthorProfileId { get; set; }
         public string Title { get; set; }
         public char PublishType { get; set; }
         public bool ReadOnlyByAuthor { get; set; }
-        public DateTime PublishDate { get; set; }
-        public ICollection<CommentsResponse> Comments { get; set; }
+        public CommentRequest Comment { get; set; }
     }
 }

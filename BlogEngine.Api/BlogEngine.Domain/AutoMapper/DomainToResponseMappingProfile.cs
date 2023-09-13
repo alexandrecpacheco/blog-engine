@@ -9,6 +9,7 @@ namespace BlogEngine.Domain.AutoMapper
         public DomainToResponseMappingProfile()
         {
             CreateMap<PostsEntity, PostsResponse>();
+            CreateMap<CommentsEntity, CommentsResponse>();
         }
     }
 }

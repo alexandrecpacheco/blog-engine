@@ -37,14 +37,25 @@ CREATE TABLE posts
 (
     post_id  int IDENTITY (1,1),
     author_profile_id int NOT NULL,
-    comment varchar(250) NOT NULL,
     title varchar(100)               NOT NULL,
-    publish_date datetime NOT NULL,
-    approved bit NOT NULL,
+    publish_type char(1) NOT NULL,
     [readonly_by_author] bit NOT NULL, 
+    publish_date datetime NULL,
     created_at  datetime DEFAULT GETDATE() NOT NULL,
     updated_at  datetime                   NULL,
     CONSTRAINT ["pk_posts"] PRIMARY KEY NONCLUSTERED (post_id)
+)
+GO
+
+CREATE TABLE comments
+(
+    comment_id int IDENTITY (1,1),
+    post_id int NOT NULL,
+    comment varchar(250) NOT NULL,
+    readble_by_author_profile_id int NULL,
+    created_at  datetime DEFAULT GETDATE() NOT NULL,
+    updated_at  datetime                   NULL,
+    CONSTRAINT ["pk_comments"] PRIMARY KEY NONCLUSTERED (comment_id)
 )
 GO
 
@@ -58,9 +69,9 @@ ALTER TABLE author_profile
         FOREIGN KEY (author_id) REFERENCES [author] (author_id)
 GO
 
-ALTER TABLE posts
-    ADD CONSTRAINT ["fk_posts_author_profile"]
-        FOREIGN KEY (author_profile_id) REFERENCES [author_profile] (author_profile_id)
+ALTER TABLE comments
+    ADD CONSTRAINT ["fk_comments_posts"]
+        FOREIGN KEY (post_id) REFERENCES [posts] (post_id)
 GO
 
 INSERT INTO [profile] ([description], created_at) VALUES ('Public', GETDATE()), ('Writer', GETDATE()), ('Editor', GETDATE())

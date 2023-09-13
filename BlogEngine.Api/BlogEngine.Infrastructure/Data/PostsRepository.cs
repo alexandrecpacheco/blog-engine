@@ -16,10 +16,9 @@ namespace BlogEngine.Infrastructure.Data
 
         public async Task<int> Create(PostsEntity posts, DbConnection dbConnection, DbTransaction dbTransaction)
         {
-            //TODO: Need to be created
             const string query = @"
-                    INSERT INTO posts (user_profile_id, [description], start_at, end_at)
-                    VALUES (@UserProfileId, @Description, @StartAt, @EndAt)
+                    INSERT INTO posts(author_profile_id, title, publish_type, publish_date, readonly_by_author)
+                    values (@AuthorProfileId, @Title, @PublishType, @PublishDate, @ReadonlyByAuthor)
             
                     SELECT @@IDENTITY;
             ";
@@ -31,9 +30,43 @@ namespace BlogEngine.Infrastructure.Data
         {
             await using var conn = await _database.CreateAndOpenConnection();
             const string query = @"
-                SELECT * FROM posts
-            ";  
-            return await conn.QueryAsync<PostsEntity>(query);
+                SELECT p.post_id, p.author_profile_id, p.publish_type, p.readonly_by_author, p.title, p.publish_date,
+                    c.comment_id, c.post_id, c.readble_by, c.comment_id, c.comment
+                    FROM posts p
+                    INNER JOIN comments c ON
+	                    c.post_id = p.post_id
+            ";
+            
+            var postsDictionary = new Dictionary<int, PostsEntity>();
+            var commentsDictionary = new Dictionary<int, CommentsEntity>();
+            var result = await conn.QueryAsync<PostsEntity, CommentsEntity, PostsEntity>(query,
+                (posts, comments) =>
+                {
+                    if (posts != null)
+                    {
+                        if (postsDictionary.TryGetValue(posts.PostId, out var postResponse) == false)
+                        {
+                            postResponse = posts;
+                            postsDictionary.Add(postResponse.PostId, postResponse);
+                        }
+
+                        if (comments != null)
+                        {
+                            if (commentsDictionary.TryGetValue(comments.CommentId, out var commentResponse) == false)
+                            {
+                                commentResponse = comments;
+                                postResponse.Comments.Add(commentResponse);
+                            }
+                        }
+
+                        return postResponse;
+                    }
+
+                    return new PostsEntity();
+
+                }, splitOn: "post_id, comment_id");
+
+            return result.ToList();
         }
     }
 }

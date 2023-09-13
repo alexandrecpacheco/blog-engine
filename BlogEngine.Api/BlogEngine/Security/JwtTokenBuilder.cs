@@ -82,7 +82,7 @@ namespace BlogEngine.Security
                 _issuer,
                 _audience,
                 claimsIdentity.Claims,
-                expires: DateTime.UtcNow.AddHours(_expiryInHours),
+                expires: DateTime.UtcNow.AddDays(_expiryInHours),
                 signingCredentials: new SigningCredentials(_securityKey, _algorithm));
 
             return new JwtToken(token);
