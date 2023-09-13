@@ -1,5 +1,4 @@
-﻿using BlogEngine.Domain;
-using BlogEngine.Domain.Intefaces;
+﻿using BlogEngine.Domain.Intefaces;
 using BlogEngine.Domain.Intefaces.Data.Repository;
 using BlogEngine.Domain.Intefaces.Data.Service;
 using BlogEngine.Infrastructure;
@@ -23,7 +22,6 @@ namespace BlogEngine.IoC
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IAuthorProfileRepository, AuthorProfileRepository>();
             services.AddScoped<IPostsRepository, PostsRepository>();
-            services.AddScoped<ICommentsRepository, CommentsRepository>();
         }
     }
 }

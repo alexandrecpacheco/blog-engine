@@ -24,9 +24,9 @@ namespace BlogEngine.Service
             _database = database;
         }
 
-        public async Task<Author> AuthenticationAsync(SignInRequest signInRequest)
+        public async Task<AuthorEntity> AuthenticationAsync(SignInRequest signInRequest)
         {
-            var author = new Author()
+            var author = new AuthorEntity()
             {
                 Email = signInRequest.Email,
                 Password = signInRequest.Password
@@ -51,7 +51,7 @@ namespace BlogEngine.Service
 
             await _database.ExecuteInTransaction(async (connection, transaction) =>
             {
-                var author = new Author
+                var author = new AuthorEntity
                 {
                     Name = authorRequest.Name.Trim(),
                     Email = authorRequest.Email.Trim(),
@@ -62,7 +62,7 @@ namespace BlogEngine.Service
                 Log.Information("Insert a new author");
                 var authorId = await _authorRepository.CreateAsync(author, connection, transaction);
                 var profile = (ProfileEnum)Enum.Parse(typeof(ProfileEnum), authorRequest.AuthorProfile.Profile.Description);
-                var authorProfile = new AuthorProfile
+                var authorProfile = new AuthorProfileEntity
                 {
                     ProfileId = (int)profile,
                     AuthorId = authorId
@@ -73,7 +73,7 @@ namespace BlogEngine.Service
             });
         }
 
-        public async Task<Author> GetByEmailAsync(string email)
+        public async Task<AuthorEntity> GetByEmailAsync(string email)
         {
             return await _authorRepository.GetByEmailAsync(email);
         }

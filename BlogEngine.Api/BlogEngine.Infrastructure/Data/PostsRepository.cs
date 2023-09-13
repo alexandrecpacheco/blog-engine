@@ -14,7 +14,7 @@ namespace BlogEngine.Infrastructure.Data
             _database = database;
         }
 
-        public async Task<int> Create(Posts posts, DbConnection dbConnection, DbTransaction dbTransaction)
+        public async Task<int> Create(PostsEntity posts, DbConnection dbConnection, DbTransaction dbTransaction)
         {
             //TODO: Need to be created
             const string query = @"
@@ -27,5 +27,13 @@ namespace BlogEngine.Infrastructure.Data
             return await dbConnection.QuerySingleAsync<int>(query, posts, dbTransaction);
         }
 
+        public async Task<IEnumerable<PostsEntity>> GetPosts()
+        {
+            await using var conn = await _database.CreateAndOpenConnection();
+            const string query = @"
+                SELECT * FROM posts
+            ";  
+            return await conn.QueryAsync<PostsEntity>(query);
+        }
     }
 }

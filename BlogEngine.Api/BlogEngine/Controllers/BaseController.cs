@@ -28,7 +28,7 @@ namespace BlogEngine.Controllers
             }
         }
 
-        protected static AuthorAuthenticatedResponse GenerateToken(Author author, ApiSettings apiSettings)
+        protected static AuthorAuthenticatedResponse GenerateToken(AuthorEntity author, ApiSettings apiSettings)
         {
             var claims = author.AuthorProfile.Profile.Description;
 

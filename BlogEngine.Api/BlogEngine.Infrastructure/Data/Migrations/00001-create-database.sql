@@ -37,25 +37,14 @@ CREATE TABLE posts
 (
     post_id  int IDENTITY (1,1),
     author_profile_id int NOT NULL,
-    comment_id int NOT NULL,
+    comment varchar(250) NOT NULL,
     title varchar(100)               NOT NULL,
     publish_date datetime NOT NULL,
     approved bit NOT NULL,
+    [readonly_by_author] bit NOT NULL, 
     created_at  datetime DEFAULT GETDATE() NOT NULL,
     updated_at  datetime                   NULL,
     CONSTRAINT ["pk_posts"] PRIMARY KEY NONCLUSTERED (post_id)
-)
-GO
-
-CREATE TABLE comments
-(
-    comment_id int IDENTITY (1,1),
-    post_id int NOT NULL,
-    comment varchar(250) NOT NULL,
-    author_profile_id int NULL,
-    created_at  datetime DEFAULT GETDATE() NOT NULL,
-    updated_at  datetime                   NULL,
-    CONSTRAINT ["pk_comments"] PRIMARY KEY NONCLUSTERED (comment_id)
 )
 GO
 
@@ -71,16 +60,6 @@ GO
 
 ALTER TABLE posts
     ADD CONSTRAINT ["fk_posts_author_profile"]
-        FOREIGN KEY (author_profile_id) REFERENCES [author_profile] (author_profile_id)
-GO
-
-ALTER TABLE posts
-    ADD CONSTRAINT ["fk_posts_comments"]
-        FOREIGN KEY (comment_id) REFERENCES [comments] (comment_id)
-GO
-
-ALTER TABLE comments
-    ADD CONSTRAINT ["fk_comments_posts"]
         FOREIGN KEY (author_profile_id) REFERENCES [author_profile] (author_profile_id)
 GO
 
