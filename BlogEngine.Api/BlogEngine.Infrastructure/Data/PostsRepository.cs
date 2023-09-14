@@ -1,4 +1,5 @@
 ﻿using BlogEngine.Domain.Entities;
+using BlogEngine.Domain.Enums;
 using BlogEngine.Domain.Intefaces;
 using BlogEngine.Domain.Intefaces.Data.Repository;
 using Dapper;
@@ -39,21 +40,27 @@ namespace BlogEngine.Infrastructure.Data
             await dbConnection.ExecuteAsync(query, posts, dbTransaction);
         }
 
-        public async Task<IEnumerable<PostsEntity>> GetPosts()
+        public async Task<IEnumerable<PostsEntity>> GetPublishedPosts()
         {
             await using var conn = await _database.CreateAndOpenConnection();
             const string query = @"
-                SELECT p.post_id, p.author_profile_id, p.publish_type, p.readonly_by_author, p.title, p.publish_date,
-                    c.comment_id, c.post_id, c.readble_by, c.comment_id, c.comment
+                SELECT p.post_id, p.author_profile_id, p.readonly_by_author, p.title, p.description,
+                    c.comment_id, c.post_id, c.readble_by_author_profile_id, c.comment_id, c.comment,
+                    s.submit_id, s.publish_type, s.comment, s.publish_date
                     FROM posts p
-                    INNER JOIN comments c ON
+	                INNER JOIN submits s ON
+		                s.post_id = p.post_id
+                    LEFT JOIN comments c ON
 	                    c.post_id = p.post_id
+                WHERE s.publish_type = 'A'
+                    AND p.readonly_by_author = 0
             ";
 
             var postsDictionary = new Dictionary<int, PostsEntity>();
             var commentsDictionary = new Dictionary<int, CommentsEntity>();
-            var result = await conn.QueryAsync<PostsEntity, CommentsEntity, PostsEntity>(query,
-                (posts, comments) =>
+            var submitsDictionary = new Dictionary<int, SubmitEntity>();
+            var result = await conn.QueryAsync<PostsEntity, CommentsEntity, SubmitEntity, PostsEntity>(query,
+                (posts, comments, submit) =>
                 {
                     if (posts != null)
                     {
@@ -68,7 +75,18 @@ namespace BlogEngine.Infrastructure.Data
                             if (commentsDictionary.TryGetValue(comments.CommentId, out var commentResponse) == false)
                             {
                                 commentResponse = comments;
+                                commentResponse.PostId = postResponse.PostId;
                                 postResponse.Comments.Add(commentResponse);
+                            }
+                        }
+
+                        if (submit != null)
+                        {
+                            if (submitsDictionary.TryGetValue(submit.SubmitId, out var submitResponse) == false)
+                            {
+                                submitResponse = submit;
+                                submitResponse.PostId = postResponse.PostId;
+                                postResponse.Submit = submitResponse;
                             }
                         }
 
@@ -77,7 +95,7 @@ namespace BlogEngine.Infrastructure.Data
 
                     return new PostsEntity();
 
-                }, splitOn: "post_id, comment_id");
+                }, splitOn: "post_id, comment_id, submit_id");
 
             return result.ToList();
         }
@@ -86,10 +104,13 @@ namespace BlogEngine.Infrastructure.Data
         {
             await using var conn = await _database.CreateAndOpenConnection();
             const string query = @"
-                SELECT post_id
+                SELECT p.post_id
                     FROM posts
-                WHERE post_id = @PostId
-                AND publish_date IS NOT NULL
+	                INNER JOIN submits s ON
+		                s.post_id = p.post_id
+                WHERE p.post_id = @PostId
+                AND s.publish_type = 'A'
+                AND p.readonly_by_author = 0
             ";
             var parameters = new { postId };
 

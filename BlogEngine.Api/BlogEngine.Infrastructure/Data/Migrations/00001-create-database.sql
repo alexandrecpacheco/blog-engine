@@ -40,7 +40,6 @@ CREATE TABLE posts
     title varchar(100)               NOT NULL,
     [description] varchar(250) NOT NULL,
     [readonly_by_author] bit NOT NULL, 
-    publish_date datetime NULL,
     created_at  datetime DEFAULT GETDATE() NOT NULL,
     updated_at  datetime                   NULL,
     CONSTRAINT ["pk_posts"] PRIMARY KEY NONCLUSTERED (post_id)
@@ -65,6 +64,7 @@ CREATE TABLE submits
     post_id int NOT NULL,
     publish_type char(1) NOT NULL,
     comment varchar(250) NOT NULL,
+    publish_date datetime NULL,
     created_at  datetime DEFAULT GETDATE() NOT NULL,
     updated_at  datetime                   NULL,
     CONSTRAINT ["pk_submits"] PRIMARY KEY NONCLUSTERED (submit_id)

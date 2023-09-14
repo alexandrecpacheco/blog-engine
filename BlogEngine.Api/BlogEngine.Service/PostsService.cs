@@ -30,7 +30,6 @@ namespace BlogEngine.Service
                     AuthorProfileId = request.AuthorProfileId,
                     Title = request.Title,
                     Description = request.Description,
-                    PublishDate = null,
                     ReadOnlyByAuthor = false,
                 };
 
@@ -59,9 +58,9 @@ namespace BlogEngine.Service
             });
         }
 
-        public async Task<IEnumerable<PostsResponse>> GetPostsAsync()
+        public async Task<IEnumerable<PostsResponse>> GetPublishedPostsAsync()
         {
-            var result = await _postsRepository.GetPosts();
+            var result = await _postsRepository.GetPublishedPosts();
             if (result == null) return default!;
 
             var mapped = _mapper.Map<IEnumerable<PostsResponse>>(result);

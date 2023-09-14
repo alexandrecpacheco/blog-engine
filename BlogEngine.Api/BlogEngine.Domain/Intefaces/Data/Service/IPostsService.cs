@@ -7,7 +7,7 @@ namespace BlogEngine.Domain.Intefaces.Data.Service
     {
         Task CreateAsync(PostRequest request);
         Task UpdateAsync(PostUpdateRequest request);
-        Task<IEnumerable<PostsResponse>> GetPostsAsync();
+        Task<IEnumerable<PostsResponse>> GetPublishedPostsAsync();
         Task<bool> GetPublishedPostByIdAsync(int postId);
         Task<IEnumerable<PostsResponse>> GetPendingPostsAsync();
     }
