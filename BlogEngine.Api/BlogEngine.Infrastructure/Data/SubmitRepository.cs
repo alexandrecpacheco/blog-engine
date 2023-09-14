@@ -1,4 +1,5 @@
 ﻿using BlogEngine.Domain.Entities;
+using BlogEngine.Domain.Intefaces;
 using BlogEngine.Domain.Intefaces.Data.Repository;
 using Dapper;
 using System.Data.Common;
@@ -7,6 +8,29 @@ namespace BlogEngine.Infrastructure.Data
 {
     public class SubmitRepository : ISubmitRepository
     {
+        private readonly IDatabase _database;
+
+        public SubmitRepository(IDatabase database)
+        {
+            _database = database;
+        }
+
+        public async Task<int> GetSubmitPostByIdAsync(int postId)
+        {
+            await using var conn = await _database.CreateAndOpenConnection();
+            const string query = @"
+                SELECT post_id
+                    FROM posts p
+                    INNER JOIN submits s ON
+                        p.post_id = s.post_id
+                WHERE s.post_id = @PostId
+                    AND s.publish_type = 'R'
+            ";
+
+            var parameters = new { postId };
+            return await conn.QueryFirstOrDefaultAsync<int>(query, parameters);
+        }
+
         public async Task Update(SubmitEntity submit, bool @readonly, DbConnection dbConnection, DbTransaction dbTransaction)
         {
             const string query = @"

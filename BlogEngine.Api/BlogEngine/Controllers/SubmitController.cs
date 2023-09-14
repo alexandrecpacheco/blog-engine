@@ -13,6 +13,11 @@ namespace BlogEngine.Controllers
             _submitService = submitService;
         }
 
+        /// <summary>
+        /// Approve or Reject the posts created by the Writers
+        /// </summary>
+        /// <param name="request">Submit Request</param>
+        /// <returns>Ok</returns>
         [Attributes.Authorize(Role.Editor)]
         [HttpPut("update-submit-post")]
         [ProducesResponseType(StatusCodes.Status200OK)]
