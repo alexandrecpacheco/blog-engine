@@ -13,6 +13,11 @@ namespace BlogEngine.Controllers
             _commentsService = commentsService;
         }
 
+        /// <summary>
+        /// Create a new comment by every roles.
+        /// </summary>
+        /// <param name="request">Comment Request</param>
+        /// <returns>Ok</returns>
         [Attributes.Authorize(Role.Public, Role.Writer, Role.Editor)]
         [HttpPost("create-comment")]
         [ProducesResponseType(StatusCodes.Status200OK)]

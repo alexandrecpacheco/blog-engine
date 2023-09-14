@@ -11,14 +11,16 @@ namespace BlogEngine.Service
     public class PostsService : IPostsService
     {
         private readonly IPostsRepository _postsRepository;
+        private readonly ISubmitService _submitService;
         private readonly IDatabase _database;
         private readonly IMapper _mapper;
 
-        public PostsService(IPostsRepository postsRepository, IDatabase database, IMapper mapper)
+        public PostsService(IPostsRepository postsRepository, IDatabase database, IMapper mapper, ISubmitService submitService)
         {
             _postsRepository = postsRepository;
             _database = database;
             _mapper = mapper;
+            _submitService = submitService;
         }
 
         public async Task CreateAsync(PostRequest request)
@@ -43,7 +45,11 @@ namespace BlogEngine.Service
 
             if (postId <= 0)
                 throw new InvalidOperationException("The Post mentioned does not exists");
-            
+
+            var submitId = await _submitService.GetSubmitPostByIdAsync(request.PostId);
+            if (submitId <= 0)
+                throw new InvalidOperationException("The Post cannot be modified");
+
             await _database.ExecuteInTransaction(async (connection, transaction) =>
             {
                 var post = new PostsEntity()
