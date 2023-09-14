@@ -5,6 +5,6 @@ namespace BlogEngine.Domain.Intefaces.Data.Repository
 {
     public interface ISubmitRepository
     {
-        Task Update(SubmitEntity submit, DbConnection dbConnection, DbTransaction dbTransaction);
+        Task Update(SubmitEntity submit, bool @readonly, DbConnection dbConnection, DbTransaction dbTransaction);
     }
 }

@@ -13,25 +13,34 @@ namespace BlogEngine.Controllers
             _postsService = postsService;
         }
 
+        /// <summary>
+        /// Get published posts with approval status
+        /// </summary>
+        /// <returns>List of posts approved</returns>
         [Attributes.Authorize(Role.Public, Role.Writer, Role.Editor)]
-        [HttpGet("get-posts")]
+        [HttpGet("get-published-posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPosts()
+        public async Task<IActionResult> GetPublishedPosts()
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var search = await _postsService.GetPostsAsync();
+            var search = await _postsService.GetPublishedPostsAsync();
 
             return await ResponseResult(search);
         }
 
+        /// <summary>
+        /// Get pulished post by id
+        /// </summary>
+        /// <param name="postId">postId</param>
+        /// <returns>Published Post</returns>
         [Attributes.Authorize(Role.Public, Role.Writer, Role.Editor)]
         [HttpGet("get-published-posts-by-id")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPublishedPostById([FromQuery] int postId)
         {
             if (!ModelState.IsValid) return BadRequest();
-
+            
             var published = await _postsService.GetPublishedPostByIdAsync(postId);
             var result = new { published };
             

@@ -28,6 +28,17 @@ namespace BlogEngine.Controllers
             }
         }
 
+        protected int GetAuthorId()
+        {
+            if (User.Identity is { IsAuthenticated: false }) return 0;
+
+            var currentUserId = int.Parse(
+                User?.Claims.FirstOrDefault(p => p.Type == "id")?.Value ??
+                throw new ArgumentNullException("Not Authorized Author"));
+
+            return currentUserId;
+        }
+
         protected static AuthorAuthenticatedResponse GenerateToken(AuthorEntity author, ApiSettings apiSettings)
         {
             var claims = author.AuthorProfile.Profile.Description;

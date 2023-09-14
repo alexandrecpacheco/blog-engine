@@ -15,8 +15,8 @@ namespace BlogEngine.Domain.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public bool ReadOnlyByAuthor { get; set; }
-        public DateTime? PublishDate { get; set; }
         public AuthorProfileEntity? AuthorProfile { get; set; }
+        public SubmitEntity Submit { get; set; }
         public ICollection<CommentsEntity> Comments { get; set; }
     }
 }
