@@ -7,7 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.21" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlogEngine.Domain\BlogEngine.Domain.csproj" />
+    <ProjectReference Include="..\BlogEngine.IoC\BlogEngine.IoC.csproj" />
+    <ProjectReference Include="..\BlogEngine.Service\BlogEngine.Service.csproj" />
   </ItemGroup>
 
 </Project>
