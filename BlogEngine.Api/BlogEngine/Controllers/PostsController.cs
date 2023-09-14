@@ -47,6 +47,11 @@ namespace BlogEngine.Controllers
             return await ResponseResult(result);
         }
 
+        /// <summary>
+        /// Create posts only by Writers
+        /// </summary>
+        /// <param name="request">PosRequest</param>
+        /// <returns>Ok</returns>
         [Attributes.Authorize(Role.Writer)]
         [HttpPost("create-post")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -61,6 +66,11 @@ namespace BlogEngine.Controllers
             return await ResponseResult(true);
         }
 
+        /// <summary>
+        /// Update Posts only by Writer if only its Rejected
+        /// </summary>
+        /// <param name="request">PostUpdateRequest</param>
+        /// <returns>Ok</returns>
         [Attributes.Authorize(Role.Writer)]
         [HttpPut("update-post")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -75,6 +85,10 @@ namespace BlogEngine.Controllers
             return await ResponseResult(true);
         }
 
+        /// <summary>
+        /// Get Pending Posts only by Editor
+        /// </summary>
+        /// <returns></returns>
         [Attributes.Authorize(Role.Editor)]
         [HttpGet("get-pending-posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]

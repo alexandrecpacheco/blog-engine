@@ -45,5 +45,12 @@ namespace BlogEngine.Service
                 await _submitRepository.Update(submit, @readonly, connection, transaction);
             });
         }
+
+        public async Task<int> GetSubmitPostByIdAsync(int postId)
+        {
+            var result = await _submitRepository.GetSubmitPostByIdAsync(postId);
+
+            return result;
+        }
     }
 }
